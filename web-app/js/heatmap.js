@@ -8,6 +8,8 @@ var ctaGeneLabelFontWeight = "normal";
 var ctaHeatmapHeightWithoutLegend;
 var ctaHeatmapHeightWithLegend;
 
+//JDC TEST
+
 // Take the heatmap data in the second parameter and draw the D3 heatmap
 function drawHeatmapD3(divID, heatmapJSON, analysisID, forExport, isSA, keywordQueryString)	{
 	jQuery("#" + divID).empty();
