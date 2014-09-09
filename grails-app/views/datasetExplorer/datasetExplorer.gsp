@@ -145,7 +145,7 @@
 	  CurrentChroms: '',
 	  CurrentDataType: '',
 	  GPURL: '${grailsApplication.config.com.recomdata.datasetExplorer.genePatternURL}',
-	  EnableGP:'${grailsApplication.config.com.recomdata.datasetExplorer.genePatternEnabled}',
+	  EnableGP:'${grailsApplication.config.com.recomdata.datasetExplorer.genePatternEnabled}',  // Change this to match Config.groovy
 	  HeatmapType: 'Compare',
 	  IsAdmin: ${admin},
 	  Tokens: "${tokens}",
