@@ -59,10 +59,10 @@
                     <g:each in="${accessLogInstanceList}" status="i" var="accessLogInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                        	<td>${fieldValue(bean:accessLogInstance, field:'accesstime')}</td>
-                            <td>${fieldValue(bean:accessLogInstance, field:'username')}</td>
+                        	<td>${fieldValue(bean:accessLogInstance, field:'accesstime')}&nbsp&nbsp&nbsp&nbsp</td>
+                            <td>${fieldValue(bean:accessLogInstance, field:'username')}&nbsp&nbsp&nbsp&nbsp</td>
                         
-                            <td>${fieldValue(bean:accessLogInstance, field:'event')}</td>
+                            <td>${fieldValue(bean:accessLogInstance, field:'event')}&nbsp&nbsp&nbsp&nbsp</td>
                         
                             <td>${fieldValue(bean:accessLogInstance, field:'eventmessage')}</td>                        
                         </tr>

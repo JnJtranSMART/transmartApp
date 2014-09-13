@@ -26,7 +26,7 @@
 
 	<body>
 		<div class="body">
-			<h1>Create User</h1>
+            <h1>Create User <g:if test="${SSO == true}"> - Single Sign On Enabled (no password required)</g:if></h1>
 			<g:if test="${flash.message}">
 			<div class="message">${flash.message}</div>
 			</g:if>
@@ -39,6 +39,12 @@
 				<div class="dialog">
 					<table>
 					<tbody>
+                        <tr class="prop">
+							<td valign="top" class="name"><label for="id">WWID:</label></td>
+							<td valign="top" class="value ${hasErrors(bean:person,field:'id','errors')}">
+								<input type="text" id="id" name="id" value="${person.id}"/>
+							</td>
+						</tr>
 						<tr class="prop">
 							<td valign="top" class="name"><label for="username">Login Name:</label></td>
 							<td valign="top" class="value ${hasErrors(bean:person,field:'username','errors')}">
@@ -53,13 +59,15 @@
 							</td>
 						</tr>
 
-                        <tr class="prop">
-                            <td valign="top" class="name"><label for="passwd">Password:</label></td>
-                            <td valign="top" class="value ${hasErrors(bean:person,field:'passwd','errors')}">
-                                <input type="password" id="passwd" name="passwd" value=""/>
-                            </td>
-                        </tr>
-
+                        <g:if test="${SSO == false}">
+							<tr class="prop">
+								<td valign="top" class="name"><label for="passwd">Password:</label></td>
+								<td valign="top" class="value ${hasErrors(bean:person,field:'passwd','errors')}">
+									<input type="password" id="passwd" name="passwd" value=""/
+								</td
+							</tr>
+			  		    </g:if>
+						
 						<tr class="prop">
 							<td valign="top" class="name"><label for="email">Email:</label></td>
 							<td valign="top" class="value ${hasErrors(bean:person,field:'email','errors')}">

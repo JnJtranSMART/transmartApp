@@ -119,18 +119,20 @@ class AuthUserController {
 	}
 
     def update() {
-        saveOrUpdate()
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
+        saveOrUpdate(SSOEnabled)
     }
 
 	def create = {
-		[person: new AuthUser(params), authorityList: Role.list()]
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
+		[person: new AuthUser(params), authorityList: Role.list(), SSO:SSOEnabled]
 	}
 
     def save() {
         saveOrUpdate()
     }
 
-    private saveOrUpdate() {
+    private saveOrUpdate(def SSOEnabled = null) {
         boolean create = params.id == null
         AuthUser person = create ? new AuthUser():
                                    AuthUser.load(params.id as Long)
@@ -175,7 +177,7 @@ class AuthUserController {
                 tx.setRollbackOnly()
                 flash.message = message(code: 'Cannot save user')
                 render view: create ? 'create' : 'edit',
-                        model: [authorityList: Role.list(), person: person]
+                        model: [authorityList: Role.list(), person: person, SSO:SSOEnabled]
             }
         }
     }
@@ -198,6 +200,7 @@ class AuthUserController {
     }
 
 	private Map buildPersonModel(person) {
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
 		List roles = Role.list()
 		roles.sort { r1, r2 ->
 			r1.authority <=> r2.authority
@@ -210,6 +213,6 @@ class AuthUserController {
 		for (role in roles) {
 			roleMap[(role)] = userRoleNames.contains(role.authority)
 		}
-		return [person: person, roleMap: roleMap]
+		return [person: person, roleMap: roleMap, SSO:SSOEnabled]
 	}
 }
