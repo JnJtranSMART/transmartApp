@@ -35,7 +35,7 @@ class AuthUser extends Principal {
 	String userRealName
 	String passwd
 	String email
-	String federatedId
+	// String federatedId
 	boolean emailShow
 
 	/** plain password to create a MD5 password */
@@ -65,8 +65,9 @@ class AuthUser extends Principal {
 		username(blank: false, unique: true)
 		userRealName(blank: false)
 		passwd(blank: false)
-        email(blank:false, maxSize:255)
-        federatedId(unique: true, nullable: true)
+        // email(blank:false, maxSize:255)
+        email(nullable:true, maxSize:255)
+      //  federatedId(unique: true, nullable: true)
 	}
 
 	def String toString(){
@@ -98,7 +99,7 @@ class AuthUser extends Principal {
 
     /*
      * Should be called with an open session and active transaction
-     */
+
     static AuthUser createFederatedUser(String federatedId,
                                         String username,
                                         String realName,
@@ -115,7 +116,7 @@ class AuthUser extends Principal {
            fail with a foreign key violation.
            Ultimately, this should be fixed by changing the GORM mapping and
            maybe even the schema.
-         */
+
         SQLQuery query = session.createSQLQuery(
                 'select nextval(\'searchapp.SEQ_SEARCH_DATA_ID\') as id')
                 .addScalar('id', StandardBasicTypes.LONG)
@@ -137,4 +138,5 @@ class AuthUser extends Principal {
 
         ret
     }
+    */
 }
