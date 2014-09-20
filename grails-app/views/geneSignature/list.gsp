@@ -99,11 +99,9 @@
         </thead>
 		<tbody id="my_signatures_detail">
 
-        <%--
         <g:each var="gs" in="${myItems}" status="idx">
             <g:render template="/geneSignature/summary_record" model="[gs:gs, idx: idx]" />
         </g:each>
-        --%>
 
 		</tbody>
        	</table>     

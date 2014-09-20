@@ -102,17 +102,17 @@ class GeneSignatureController {
 
 		// break into owned and public
 		def myItems = []
-		def pubItems = []
+		// def pubItems = []
 
 		signatures.each {
-			if(user.id==it.createdByAuthUser.id) {
+		//	if(user.id==it.createdByAuthUser.id) {
 				myItems.add(it)
-			} else {
-				pubItems.add(it)
-			}
+		//	} else {
+		//		pubItems.add(it)
+		//	}
 		}
 
-		render(view: "list", model:[user: user, adminFlag: bAdmin, myItems: myItems, pubItems: pubItems, ctMap: ctMap])
+		render(view: "list", model:[user: user, adminFlag: bAdmin, myItems: myItems, ctMap: ctMap]) // pubItems: pubItems, ctMap: ctMap])
 	}
 	
 
