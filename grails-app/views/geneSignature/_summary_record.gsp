@@ -21,8 +21,7 @@
 	<g:set var="dtlLink" value="${createLink(action:'show', id:gs.id)}" />
     <g:set var="ownerFlag" value="${adminFlag || user.id==gs.createdByAuthUser.id}" />
 	<g:set var="ctLkup" value="${ctMap.get(gs.id)}" />
-<%--    <td><g:checkBox name="${gs.id}" class="geneList"/></td> --%>
-    <td>Check</td>
+    <td><g:checkBox name="${String.valueOf(gs.id)}" class="geneList"/></td>
     <td><a onclick="showDialog('GeneSigDetail_${gs.id}', { title: 'Gene Signature Detail [${gs.name?.encodeAsHTML()}]', url: '${dtlLink}'})">
         <img alt="detail" style="vertical-align:middle;" src="${resource(dir:'images',file:'grid.png')}" />&nbsp;${gs.name?.encodeAsHTML()}</a></td>
     <td>${gs.createdByAuthUser.userRealName?.encodeAsHTML()}</td>
