@@ -97,8 +97,8 @@ class GeneSignatureController {
 		log.info "Admin? "+bAdmin
 
 		// summary view
-		def signatures = geneSignatureService.listPermissionedGeneSignatures(user.id, bAdmin);
-		def ctMap = geneSignatureService.getPermissionedCountMap(user.id, bAdmin)
+        def signatures = geneSignatureService.listPermissionedGeneSignatures(user);
+        def ctMap = geneSignatureService.getPermissionedCountMap(user.id, bAdmin)
 
 		// break into owned and public
 		def myItems = []

@@ -55,7 +55,7 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 	String normMethodOther
 	ConceptCode analysisMethodConceptCode
 	String analysisMethodOther
-    boolean multipleTestingCorrection = false
+    Long multipleTestingCorrection
 	ConceptCode pValueCutoffConceptCode
 	String uniqueId
 	Date dateCreated
@@ -84,6 +84,22 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 	CellLine experimentTypeCellLine
 	String experimentTypeInVivoDescr
 	String experimentTypeATCCRef
+
+    boolean qcPerformed = false
+    Date qcDate
+    String qcInfo
+    String dataSource
+    String versionStr
+    String customValue1
+    String customName1
+    String customValue2
+    String customName2
+    String customValue3
+    String customName3
+    String customValue4
+    String customName4
+    String customValue5
+    String customName5
 
 	static hasMany = [geneSigItems:GeneSignatureItem]
 
@@ -136,6 +152,21 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 			experimentTypeCellLine column:'EXPERIMENT_TYPE_CELL_LINE_ID'
 			experimentTypeInVivoDescr column:'EXPERIMENT_TYPE_IN_VIVO_DESCR'
 			experimentTypeATCCRef column:'EXPERIMENT_TYPE_ATCC_REF'
+            qcPerformed column:'QC_PERFORMED'
+            qcDate column:'QC_DATE'
+            qcInfo column:'QC_INFO'
+            dataSource column:'DATA_SOURCE'
+            versionStr column:'VERSION'
+            customValue1 column:'CUSTOM_VALUE1'
+            customName1 column:'CUSTOM_NAME1'
+            customValue2 column:'CUSTOM_VALUE2'
+            customName2 column:'CUSTOM_NAME2'
+            customValue3 column:'CUSTOM_VALUE3'
+            customName3 column:'CUSTOM_NAME3'
+            customValue4 column:'CUSTOM_VALUE4'
+            customName4 column:'CUSTOM_NAME4'
+            customValue5 column:'CUSTOM_VALUE5'
+            customName5 column:'CUSTOM_NAME5'
 		}
 	}
 
@@ -173,6 +204,22 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 		experimentTypeCellLine(nullable:true)
 		experimentTypeInVivoDescr(nullable:true, maxSize:255)
 		experimentTypeATCCRef(nullable:true, maxSize:255)
+        multipleTestingCorrection(nullable:true)
+        qcPerformed column:'QC_PERFORMED'
+        qcDate column:'QC_DATE'
+        qcInfo column:'QC_INFO'
+        dataSource column:'DATA_SOURCE'
+        versionStr column:'VERSION'
+        customValue1 column:'CUSTOM_VALUE1'
+        customName1 column:'CUSTOM_NAME1'
+        customValue2 column:'CUSTOM_VALUE2'
+        customName2 column:'CUSTOM_NAME2'
+        customValue3 column:'CUSTOM_VALUE3'
+        customName3 column:'CUSTOM_NAME3'
+        customValue4 column:'CUSTOM_VALUE4'
+        customName4 column:'CUSTOM_NAME4'
+        customValue5 column:'CUSTOM_VALUE5'
+        customName5 column:'CUSTOM_NAME5'
 	}
 
 	/**
@@ -180,6 +227,9 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 	 */
 	def beforeInsert = {
 		dateCreated = new Date()
+        if(qcPerformed){
+            qcDate = new Date()
+        }
 	}
 
 	/**
@@ -187,6 +237,11 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 	 */
 	def beforeUpdate = {
 		lastUpdated = new Date()
+        if(qcPerformed && qcDate==null){
+            qcDate = new Date()
+        }else if(!qcPerformed){
+            qcDate = null
+        }
 		uniqueId = DOMAIN_KEY+":"+id
 	}
 
@@ -271,6 +326,21 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 		if (modifiedByAuthUser?.id) params.put("modifiedByAuthUser.id",modifiedByAuthUser?.id)
 		params.put("lastUpdated",lastUpdated)
 		params.put("versionNumber",versionNumber)
+        params.put("dataSource",dataSource)
+        params.put("qcPerformed",qcPerformed)
+        params.put("qcDate", qcDate)
+        params.put("qcInfo", qcInfo)
+        params.put("versionStr",versionStr)
+        params.put("customValue1",customValue1)
+        params.put("customName1",customName1)
+        params.put("customValue2",customValue2)
+        params.put("customName2",customName2)
+        params.put("customValue3",customValue3)
+        params.put("customName3",customName3)
+        params.put("customValue4",customValue4)
+        params.put("customName4",customName4)
+        params.put("customValue5",customValue5)
+        params.put("customName5",customName5)
 		return params;
 	}
 
@@ -282,36 +352,36 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 		gs.description=description
 		gs.uploadFile=uploadFile
 		gs.fileSchema=fileSchema
-		gs.foldChgMetricConceptCode=foldChgMetricConceptCode
-		gs.analyticCatConceptCode=analyticCatConceptCode
-		gs.analyticCatOther=analyticCatOther
-		gs.techPlatform=techPlatform
-		gs.analystName=analystName
-		gs.normMethodConceptCode=normMethodConceptCode
-		gs.normMethodOther=normMethodOther
-		gs.analysisMethodConceptCode=analysisMethodConceptCode
-		gs.analysisMethodOther=analysisMethodOther
-		gs.multipleTestingCorrection=multipleTestingCorrection
-		gs.pValueCutoffConceptCode=pValueCutoffConceptCode
-		gs.uniqueId=null
-		gs.publicFlag=publicFlag
-		gs.deletedFlag=deletedFlag
-		//gs.parentGeneSignature=parentGeneSignature
-		gs.sourceConceptCode=sourceConceptCode
-		gs.sourceOther=sourceOther
-		gs.ownerConceptCode=ownerConceptCode
-		gs.stimulusDescription=stimulusDescription
-		gs.stimulusDosing=stimulusDosing
-		gs.treatmentDescription=treatmentDescription
-		gs.treatmentDosing=treatmentDosing
-		gs.treatmentCompound=treatmentCompound
-		gs.treatmentProtocolNumber=treatmentProtocolNumber
-		gs.pmIds=pmIds
-		gs.speciesConceptCode=speciesConceptCode
-		gs.speciesMouseSrcConceptCode=speciesMouseSrcConceptCode
-		gs.speciesMouseDetail=speciesMouseDetail
-		gs.tissueTypeConceptCode=tissueTypeConceptCode
-		gs.experimentTypeConceptCode=experimentTypeConceptCode
+        gs.foldChgMetricConceptCode=foldChgMetricConceptCode?.id ? foldChgMetricConceptCode : null
+        gs.analyticCatConceptCode = analyticCatConceptCode?.id ? analyticCatConceptCode : null   // need to check if there are actually not null concept codes before assigning or else we get transient object errors
+        gs.analyticCatOther=analyticCatOther
+        gs.techPlatform=techPlatform
+        gs.analystName=analystName
+        gs.normMethodConceptCode=normMethodConceptCode?.id ? normMethodConceptCode : null
+        gs.normMethodOther=normMethodOther
+        gs.analysisMethodConceptCode=analysisMethodConceptCode?.id ? analysisMethodConceptCode : null
+        gs.analysisMethodOther=analysisMethodOther
+        gs.multipleTestingCorrection=multipleTestingCorrection
+        gs.pValueCutoffConceptCode = pValueCutoffConceptCode?.id ? pValueCutoffConceptCode : null
+        gs.uniqueId=null
+        gs.publicFlag=publicFlag
+        gs.deletedFlag=deletedFlag
+        //gs.parentGeneSignature=parentGeneSignature
+        gs.sourceConceptCode = sourceConceptCode?.id ? sourceConceptCode : null
+        gs.sourceOther=sourceOther
+        gs.ownerConceptCode = ownerConceptCode?.id ? ownerConceptCode : null
+        gs.stimulusDescription=stimulusDescription
+        gs.stimulusDosing=stimulusDosing
+        gs.treatmentDescription=treatmentDescription
+        gs.treatmentDosing=treatmentDosing
+        gs.treatmentCompound = treatmentCompound?.id ? treatmentCompound : null
+        gs.treatmentProtocolNumber=treatmentProtocolNumber
+        gs.pmIds=pmIds
+        gs.speciesConceptCode = speciesConceptCode?.id ? speciesConceptCode : null
+        gs.speciesMouseSrcConceptCode = speciesMouseSrcConceptCode?.id ? speciesMouseSrcConceptCode : null
+        gs.speciesMouseDetail=speciesMouseDetail
+        gs.tissueTypeConceptCode = tissueTypeConceptCode?.id ? tissueTypeConceptCode : null
+        gs.experimentTypeConceptCode = experimentTypeConceptCode?.id ? experimentTypeConceptCode : null
 		gs.experimentTypeCellLine= experimentTypeCellLine
 		gs.experimentTypeInVivoDescr=experimentTypeInVivoDescr
 		gs.experimentTypeATCCRef=experimentTypeATCCRef
@@ -320,6 +390,21 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 		gs.modifiedByAuthUser=modifiedByAuthUser
 		gs.lastUpdated=lastUpdated
 		gs.versionNumber=versionNumber
+        gs.dataSource= dataSource
+        gs.qcPerformed=qcPerformed
+        gs.qcDate=qcDate
+        gs.qcInfo=qcInfo
+        gs.versionStr=versionStr
+        gs.customValue1=customValue1
+        gs.customName1=customName1
+        gs.customValue2=customValue2
+        gs.customName2=customName2
+        gs.customValue3=customValue3
+        gs.customName3=customName3
+        gs.customValue4=customValue4
+        gs.customName4=customName4
+        gs.customValue5=customValue5
+        gs.customName5=customName5
 	}
 
 	/**
@@ -403,6 +488,16 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 		values.add(["P-value Cutoff:",pValueCutoffConceptCode?.codeName])
 		values.add(["Fold-change metric:",foldChgMetricConceptCode?.codeName])
 		values.add(["Original upload file:",uploadFile])
+        values.add(["Version:", versionStr])
+        values.add(["Data Source:", dataSource])
+        values.add(["QC Performed", qcPerformed?"Yes":"No"])
+        values.add(["QC Date", qcDate!=null ? qcDate : ""])
+        values.add(["QC Detail", qcInfo!=null? qcInfo : ""])
+        values.add([customName1, customValue1])
+        values.add([customName2, customValue2])
+        values.add([customName3, customValue3])
+        values.add([customName4, customValue4])
+        values.add([customName5, customValue5])
 		
 		def metaSheet = new ExcelSheet("Gene Signature Info", headers, values);
 		

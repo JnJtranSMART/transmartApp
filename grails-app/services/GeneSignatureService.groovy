@@ -565,17 +565,28 @@ public class GeneSignatureService {
 		
 		return marker;
 	}
+
+    /**
+     * Gets a list of gene signature records the user is allowed to view.
+
+     */
+    def listPermissionedGeneSignatures(AuthUser user) {
+        def permCriteria = (user.isAdmin()) ? "(1=1)" : "(gs.createdByAuthUser.id="+user.id+" or gs.publicFlag=true)"
+        String qBuf = "from GeneSignature gs where "+permCriteria+" and gs.deletedFlag=false order by gs.name"
+        def retValue = GeneSignature.findAll(qBuf)
+        return retValue
+    }
 	
 	/**
 	 * gets a lit of permissioned gene signature records the user is allowed to view. The returned
 	 * items are list of domain objects
-	 */
+
 	def listPermissionedGeneSignatures(Long userId, boolean bAdmin) {
 		def permCriteria = (bAdmin) ? "(1=1)" : "(gs.createdByAuthUser.id="+userId+" or gs.publicFlag=true)"
         def qBuf = "from GeneSignature gs where "+permCriteria+" and gs.deletedFlag=false order by gs.name"
 		return GeneSignature.findAll(qBuf);
 	}
-
+    */
 	/**
 	 * creates a Map of the gene counts per gene signature including up and down regulation counts for those
 	 * signatures the user has permission to view
