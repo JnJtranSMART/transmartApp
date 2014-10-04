@@ -850,10 +850,12 @@ class GeneSignatureController {
 	 * bind form parameters to GeneSignature domain instance
 	 */
 	void bindGeneSigData(Map params, GeneSignature gs) {
-		// skip if page param not specified
-		if(params.page==null) return
-
-		long pageNum = Long.parseLong(params.page);
+		// We were skipping here but that was throwing an error
+		// Assume page 1 if it is not set for now
+        long pageNum = 1
+		if (params.page != null)  {
+            pageNum = Long.parseLong(params.page);
+        }
 
 		switch (pageNum) {
 			case 1:

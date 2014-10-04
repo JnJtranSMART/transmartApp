@@ -205,21 +205,21 @@ class GeneSignature implements Cloneable, IDomainExcelWorkbook {
 		experimentTypeInVivoDescr(nullable:true, maxSize:255)
 		experimentTypeATCCRef(nullable:true, maxSize:255)
         multipleTestingCorrection(nullable:true)
-        qcPerformed column:'QC_PERFORMED'
-        qcDate column:'QC_DATE'
-        qcInfo column:'QC_INFO'
-        dataSource column:'DATA_SOURCE'
-        versionStr column:'VERSION'
-        customValue1 column:'CUSTOM_VALUE1'
-        customName1 column:'CUSTOM_NAME1'
-        customValue2 column:'CUSTOM_VALUE2'
-        customName2 column:'CUSTOM_NAME2'
-        customValue3 column:'CUSTOM_VALUE3'
-        customName3 column:'CUSTOM_NAME3'
-        customValue4 column:'CUSTOM_VALUE4'
-        customName4 column:'CUSTOM_NAME4'
-        customValue5 column:'CUSTOM_VALUE5'
-        customName5 column:'CUSTOM_NAME5'
+        qcPerformed(nullable:true)
+        qcDate(nullable:true)
+        qcInfo(nullable:true)
+        dataSource(nullable:true)
+        versionStr(nullable:true)
+        customValue1(nullable:true)
+        customName1(nullable:true)
+        customValue2(nullable:true)
+        customName2(nullable:true)
+        customValue3(nullable:true)
+        customName3(nullable:true)
+        customValue4(nullable:true)
+        customName4(nullable:true)
+        customValue5(nullable:true)
+        customName5(nullable:true)
 	}
 
 	/**
