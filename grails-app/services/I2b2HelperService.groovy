@@ -819,7 +819,6 @@ class I2b2HelperService {
 			// Determine the patients to query
 			def queryResultInstance = QtQueryResultInstance.read( result_instance_id )
 			def patientSet = queryResultInstance.patientSet
-			def patientIds =  patientSet.collect { BigDecimal.valueOf( it.patient.id ) }
 
 			// If nothing is found, return
 			if( !concepts || !patientSet ) {
@@ -833,7 +832,7 @@ class I2b2HelperService {
 					eqProperty( "modifierCd", "sourcesystemCd" )
 				}
 				'in'( "conceptCode", concepts*.conceptCode )
-				'in'( "patient", patientIds )
+				'in'( "patient", patientSet )
 			}
 			results.each { row ->
 				
