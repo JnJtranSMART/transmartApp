@@ -100,4 +100,25 @@ class AuthUserDetailsService implements GrailsUserDetailsService {
             authorities ?: NO_ROLES, user.id, user.userRealName)
 	}
 
+    UserDetails loadUserByWWID(String wwid) throws UsernameNotFoundException	{
+        log.info "Attempting to find user for WWID: $wwid"
+        log.debug "Use withTransaction to avoid lazy loading initialization error when accessing the authorities collection"
+        Class<?> User = grailsApplication.getDomainClass(conf.userLookup.userDomainClassName).clazz
+        def user = User.findById(wwid)
+        if (!user) {
+            log.warn "User not found for WWID: $wwid"
+            throw new UsernameNotFoundException("User not found for WWID", wwid)
+        }
+        if (!user.enabled)	{
+            log.warn "User not enabled for WWID: $wwid"
+            throw new UsernameNotFoundException("User not enabled for WWID", wwid)
+        }
+        def authorities = user.authorities*.authority.collect {
+            new SimpleGrantedAuthority(it)
+        }
+
+        return new AuthUserDetails(user.username, user.passwd, user.enabled,
+                !user.accountExpired, !user.passwordExpired, !user.accountLocked,
+                authorities ?: NO_ROLES, user.id, user.userRealName)
+    }
 }
