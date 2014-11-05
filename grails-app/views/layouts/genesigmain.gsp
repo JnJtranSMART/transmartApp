@@ -64,7 +64,8 @@
 		</script>
 		<g:layoutHead />
         <r:layoutResources/>
-	</head>
+        <piwik:trackPageview />
+    </head>
 	<body>
         <div id="header-div">
             <g:render template="/layouts/commonheader" model="['app':'genesignature']" />

@@ -100,6 +100,7 @@
 	<script type="text/javascript" src="${resource(dir:'js/metacore', file:'metacoreEnrichment.js')}"></script>
 	<script type="text/javascript" src="${resource(dir:'js/metacore', file:'metacoreEnrichmentDisplay.js')}"></script>
     <r:layoutResources /><%-- XXX: Use template --%>
+    <piwik:trackPageview />
 </head>
 
 <body>

@@ -40,6 +40,7 @@
 		</script>
         <g:layoutHead />
         <r:layoutResources/>
+        <piwik:trackPageview />
     </head>
     <body>
          <g:layoutBody />
