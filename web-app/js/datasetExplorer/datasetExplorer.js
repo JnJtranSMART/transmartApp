@@ -305,8 +305,6 @@ Ext.onReady(function()
 					         ,
 				        	 '-'
 				        	 ,
-				        	 '-'
-				        	 ,
 					         {
 					        	 text : 'Haploview',
 					        	 handler : function()	{
