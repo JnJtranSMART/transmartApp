@@ -118,19 +118,129 @@ class AuthUserController {
 		return buildPersonModel(person)
 	}
 
+    /**
+     * Person update action.
+     */
+    def update = {
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
+
+        def person = AuthUser.load(params.id)
+        bindData person, params, [
+                include: [
+                        'enabled', 'username', 'userRealName', 'email',
+                        'description', 'emailShow', 'authorities']]
+        // person.properties = params
+
+        if (!SSOEnabled) {
+            if(!params.passwd.equals(person.getPersistentValue("passwd")))	{
+                log.info("Password has changed, encrypting new password")
+                person.passwd = springSecurityService.encodePassword(params.passwd)
+            }
+        }
+
+        def msg = new StringBuilder("${person.username} has been updated.  Changed fields include: ")
+        def modifiedFieldNames = person.getDirtyPropertyNames()
+        for (fieldName in modifiedFieldNames)	{
+            def currentValue =person."$fieldName"
+            def origValue = person.getPersistentValue(fieldName)
+            if (currentValue != origValue)	{
+                msg.append(" ${fieldName} ")
+            }
+        }
+/*
+        if (person.save()) {
+            new AccessLog(username: springSecurityService.getPrincipal().username, event:"User Updated",
+                    eventmessage: msg,
+                    accesstime:new Date()).save()
+            Role.findAll().each { it.removeFromPeople(person) }
+            addRoles(person)
+            redirect action: show, id: person.id
+        }
+        else {
+            render view: 'edit', model: buildPersonModel(person)
+        }
+*/
+        AuthUser.withTransaction { TransactionStatus tx ->
+            manageRoles(person)
+            if (person.validate() && person.save(flush: true)) {
+                new AccessLog(
+                        username:     springSecurityService.getPrincipal().username,
+                        event:        "User ${create ? 'Created' : 'Updated' }",
+                        eventmessage: msg.toString(),
+                        accesstime:   new Date()).save()
+                redirect action: show, id: person.id
+            } else {
+                tx.setRollbackOnly()
+                flash.message = message(code: 'Cannot save user')
+                render view: 'edit',
+                        model: [authorityList: Role.list(), person: person, SSO:SSOEnabled]
+            }
+        }
+    }
+
+    def create = {
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
+        [person: new AuthUser(params), authorityList: Role.list(), SSO:SSOEnabled]
+    }
+
+    /**
+     * Person save action.
+     */
+    def save = {
+        def person = new AuthUser()
+        person.properties = params
+        if(params.id==null || params.id=="") {
+            flash.message = 'Please enter an ID'
+            return render (view:'create', model:[person: new AuthUser(params), authorityList: Role.list()])
+        }
+
+        def user = AuthUser.get(params.id)
+        if(user!=null) {
+            flash.message = 'ID: '+params.id+' is already taken'
+            return render (view:'create', model:[person: new AuthUser(params), authorityList: Role.list()])
+        }
+
+        person.id = new Integer(params.id)
+        person.passwd = springSecurityService.encodePassword(params.passwd)
+        person.uniqueId = ''
+        person.name=person.userRealName;
+
+        if (person.save()) {
+            addRoles(person)
+            def msg = "User: ${person.username} for ${person.userRealName} created";
+            new AccessLog(username: springSecurityService.getPrincipal().username, event:"User Created",
+                    eventmessage: msg,
+                    accesstime:new Date()).save()
+            redirect action: show, id: person.id
+        }
+        else {
+            render view: 'create', model: [authorityList: Role.list(), person: person]
+        }
+    }
+
+    private void addRoles(person) {
+        for (String key in params.keySet()) {
+            if (key.contains('ROLE') && 'on' == params.get(key)) {
+                Role.findByAuthority(key).addToPeople(person)
+            }
+        }
+    }
+/*
     def update() {
-        saveOrUpdate()
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
+        saveOrUpdate(SSOEnabled)
     }
 
 	def create = {
-		[person: new AuthUser(params), authorityList: Role.list()]
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
+		[person: new AuthUser(params), authorityList: Role.list(), SSO:SSOEnabled]
 	}
 
     def save() {
         saveOrUpdate()
     }
 
-    private saveOrUpdate() {
+    private saveOrUpdate(def SSOEnabled = null) {
         boolean create = params.id == null
         AuthUser person = create ? new AuthUser():
                                    AuthUser.load(params.id as Long)
@@ -148,7 +258,7 @@ class AuthUserController {
         /* the auditing should probably be done in the beforeUpdate() callback,
          * but that might cause problems in users created without a spring
          * security login (does this happen?) */
-        def msg
+  /*      def msg
         if (create) {
             msg = "User: ${person.username} for ${person.userRealName} created"
         } else {
@@ -175,11 +285,11 @@ class AuthUserController {
                 tx.setRollbackOnly()
                 flash.message = message(code: 'Cannot save user')
                 render view: create ? 'create' : 'edit',
-                        model: [authorityList: Role.list(), person: person]
+                        model: [authorityList: Role.list(), person: person, SSO:SSOEnabled]
             }
         }
     }
-
+*/
     /* the owning side of the many-to-many are the roles */
     private void manageRoles(AuthUser person) {
         def oldRoles = person.authorities ?: Collections.emptySet()
@@ -198,6 +308,7 @@ class AuthUserController {
     }
 
 	private Map buildPersonModel(person) {
+        def SSOEnabled = grailsApplication.config.com.recomdata.searchtool.identityVaultURL.size() > 0
 		List roles = Role.list()
 		roles.sort { r1, r2 ->
 			r1.authority <=> r2.authority
@@ -210,6 +321,6 @@ class AuthUserController {
 		for (role in roles) {
 			roleMap[(role)] = userRoleNames.contains(role.authority)
 		}
-		return [person: person, roleMap: roleMap]
+		return [person: person, roleMap: roleMap, SSO:SSOEnabled]
 	}
 }

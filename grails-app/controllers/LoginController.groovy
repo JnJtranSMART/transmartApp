@@ -102,7 +102,13 @@ class LoginController {
 		if (isLoggedIn) {
 			redirect uri: SpringSecurityUtils.securityConfig.successHandler.defaultTargetUrl
 		} else	{
-            render view: 'auth', model: [postUrl: request.contextPath + SpringSecurityUtils.securityConfig.apf.filterProcessesUrl]
+            def ivUrl = grailsApplication.config.com.recomdata.searchtool.identityVaultURL
+            if (ivUrl.getClass() == ConfigObject && ivUrl.isEmpty())	{
+                render view: 'auth', model: [postUrl: request.contextPath + SpringSecurityUtils.securityConfig.apf.filterProcessesUrl]
+            } else	{
+                log.info("Proceeding with Identity Vault login")
+                redirect(url: ivUrl)
+            }
 		}
 	}
 

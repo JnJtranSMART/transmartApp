@@ -12,7 +12,7 @@
   
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   
-  You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+  You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
   
  
 -->
@@ -75,10 +75,10 @@
 			<td class="value">
 				<table>				
 					<tr>
-						<td style="border: none; width; 33%;">Description:</td><td style="border: none;">${gs.stimulusDescription}</td>
+						<td style="border: none; width; 33%;">Description: ${gs.stimulusDescription}</td>
 					</tr>
 					<tr>						
-						<td style="border: none; width; 33%;">Dose, units, and time:</td><td style="border: none;">${gs.stimulusDosing}</td>
+						<td style="border: none; width; 33%;">Dose, units, and time: ${gs.stimulusDosing}</td>
 					</tr>
 				</table>
 			</td>

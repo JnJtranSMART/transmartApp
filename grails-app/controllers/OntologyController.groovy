@@ -62,8 +62,7 @@ class OntologyController {
     		log.trace("searching for:"+searchtags+" of type"+tagsearchtype+"with searchterm:"+searchterm)
 			def myCount  =0;
 			def allSystemCds = []
-			def searchtermWild = '%'+searchterm.toLowerCase()+'%';
-			def visualAttrHiddenWild = '%H%';
+
 			
 			if(searchterm==null){// if there is no search term just do exact match
     		def c = i2b2.OntNode.createCriteria()
@@ -114,6 +113,10 @@ class OntologyController {
 			// if there is a serch term then use tag type to find system cd
 			// this is not a generic solution - 
 			// if tag type is all then do a name like search
+
+            def searchtermWild = '%'+searchterm.toLowerCase()+'%';
+            def visualAttrHiddenWild = '%H%';
+
 			if(tagsearchtype=='ALL'){
 				myCount = i2b2.OntNode.executeQuery("SELECT COUNT(DISTINCT o.id) from i2b2.OntNode o WHERE lower(o.name) like '"+searchtermWild+"' AND o.visualattributes NOT like '"+visualAttrHiddenWild+"'")[0]
 				

@@ -480,7 +480,7 @@ class I2b2HelperService {
 	def HashMap<String,Integer> getConceptDistributionDataForConceptOld(String concept_key, String result_instance_id) throws SQLException {
         checkQueryResultAccess result_instance_id
 
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
 		HashMap<String,Integer> results = new LinkedHashMap<String, Integer>();
 		int i=getLevelFromKey(concept_key)+1;
 		
@@ -511,7 +511,8 @@ class I2b2HelperService {
 	 *  Gets the concept distributions for a concept in a subset
 	 */
 	def  HashMap<String,Integer> getConceptDistributionDataForConcept(String concept_key, String result_instance_id) throws SQLException {
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
+
 		HashMap<String,Integer> results = new LinkedHashMap<String, Integer>();
 		
 		// check to see if there is a mapping from this concept_key to a concept_key for the results
@@ -533,7 +534,7 @@ class I2b2HelperService {
 				groovy.sql.Sql sql = new groovy.sql.Sql(dataSource);
 				String sqlt =
 						"SELECT DISTINCT c_name, c_fullname FROM i2b2metadata.i2b2 WHERE C_FULLNAME LIKE ? AND c_hlevel = ? ORDER BY C_FULLNAME";
-				log.trace(sqlt);
+				log.debug(sqlt);
 				sql.eachRow(sqlt, [fullname+"%", i], {row ->
 					if (results.get(row[0]) == null) {
 						results.put(row[0], getObservationCountForConceptForSubset("\\blah"+row[1], result_instance_id));
@@ -543,10 +544,10 @@ class I2b2HelperService {
 				})
 			}
 		} else {
-			int i=getLevelFromKey(concept_key)+1;
-			groovy.sql.Sql sql = new groovy.sql.Sql(dataSource);
+            int i=getLevelFromKey(concept_key)+1;
+            groovy.sql.Sql sql = new groovy.sql.Sql(dataSource);
 			String sqlt = "SELECT DISTINCT c_name, c_fullname FROM i2b2metadata.i2b2 WHERE C_FULLNAME LIKE ? AND c_hlevel = ? ORDER BY C_FULLNAME";
-			log.trace(sqlt);
+			log.debug(sqlt);
 			sql.eachRow(sqlt, [fullname+"%", i], {row ->
 				results.put(row[0], getObservationCountForConceptForSubset("\\blah"+row[1], result_instance_id));
 			});
@@ -559,7 +560,7 @@ class I2b2HelperService {
 	 */
 	def List<String> getChildValueConceptsFromParentKey(String concept_key) {
 		String prefix=concept_key.substring(0, concept_key.indexOf("\\",2)); //get the prefix to put on to the fullname to make a key
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
 		
 		String xml;
 		ArrayList ls=new ArrayList();
@@ -598,7 +599,7 @@ class I2b2HelperService {
 	 *  Returns the patient count for a concept key
 	 */
 	def  Integer getPatientCountForConcept(String concept_key) {
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
 		int i=0;
 		groovy.sql.Sql sql = new groovy.sql.Sql(dataSource);
 		String sqlt = """select count (distinct patient_num) as patcount
@@ -619,7 +620,8 @@ class I2b2HelperService {
         checkQueryResultAccess result_instance_id
 
 		log.trace("Getting observation count for concept:"+concept_key+" and instance:"+result_instance_id);
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
+
 		int i=0;
 		groovy.sql.Sql sql = new groovy.sql.Sql(dataSource);
 		String sqlt = """select count (*) as obscount FROM i2b2demodata.observation_fact
@@ -1250,7 +1252,7 @@ class I2b2HelperService {
 		//String slash="\\";
 		//logMessage("Here is slash: "+slash);
 		
-		String path=key.substring(key.indexOf("\\",2), key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String path=key.substring(key.indexOf("\\",2), key.length());
 		//path=path.replace("@", slash);
 		StringBuilder concepts = new StringBuilder();
 		
@@ -1272,7 +1274,7 @@ class I2b2HelperService {
 		//String slash="\\";
 		//logMessage("Here is slash: "+slash);
 		
-		String path=key.substring(key.indexOf("\\",2), key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String path=key.substring(key.indexOf("\\",2), key.length());
 		//path=path.replace("@", slash);
 		List<String> concepts = new ArrayList<String>();
 		
@@ -3430,6 +3432,7 @@ class I2b2HelperService {
 		], {row ->
 			String subjectId = row.patient_num;
 			String censoringStr = row.tval_char;
+
 			if (censoringStr != null && 
 			(censoringStr.equalsIgnoreCase("Censoring") || (censoringStr.equalsIgnoreCase("Yes")))) {	// This patient is censored
 				SurvivalData survivalData = dataMap.get(subjectId);
@@ -4322,7 +4325,7 @@ class I2b2HelperService {
 	def getChildrenWithAccessForUser(String concept_key, AuthUser user) {
 		def List<String> children=getChildPathsFromParentKey(concept_key)
 		def access = [:]
-		def path=keyToPath(concept_key).replaceAll((/\\${''}/), "\\\\\\\\");
+		def path=keyToPath(concept_key);
 		
 		//1)put all the children into the access list with default unlocked
 		for(e in children)
@@ -4390,7 +4393,7 @@ class I2b2HelperService {
 	 */
 	def List<String> getChildPathsFromParentKey(String concept_key) {
 		String prefix=concept_key.substring(0, concept_key.indexOf("\\",2)); //get the prefix to put on to the fullname to make a key
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
 		
 		String xml;
 		ArrayList ls=new ArrayList();
@@ -4694,7 +4697,7 @@ class I2b2HelperService {
 	 */
 	def  getChildPathsWithTokensFromParentKey(String concept_key) {
 		String prefix=concept_key.substring(0, concept_key.indexOf("\\",2)); //get the prefix to put on to the fullname to make a key
-		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length()).replaceAll((/\\${''}/), "\\\\\\\\");
+		String fullname=concept_key.substring(concept_key.indexOf("\\",2), concept_key.length());
 		
 		String xml;
 		def ls=[:];

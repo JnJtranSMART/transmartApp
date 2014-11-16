@@ -1754,7 +1754,7 @@ def getLastDataLoadTime  = {
 	groovy.sql.Sql sql = new groovy.sql.Sql(dataSource)
 	StringBuilder s = new StringBuilder()
 
-	s.append("""select max(analysis_update_date) last_update_time, now() AS current_time
+	s.append("""select max(analysis_update_date) last_update_time, sysdate AS current_time
              from biomart.bio_assay_analysis where analysis_update_date is not null""")
 
 	// retrieve results

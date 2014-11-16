@@ -60,13 +60,16 @@ grails.project.dependency.resolution = {
         mavenCentral()
         //Note: External configuration should contain
         //either hyve or transmartfoundation repository
+
+        mavenRepo "https://repo.transmartfoundation.org/content/repositories/public/"
+        mavenRepo "https://repo.thehyve.nl/content/repositories/public/"
     }
     dependencies {
         // you can remove whichever you're not using
-        runtime 'org.postgresql:postgresql:9.3-1100-jdbc4'
+        // runtime 'org.postgresql:postgresql:9.3-1100-jdbc4'
         runtime 'com.oracle:ojdbc7:12.1.0.1'
 
-        compile 'org.transmartproject:transmart-core-api:1.0-SNAPSHOT'
+        // compile 'org.transmartproject:transmart-core-api:1.0-SNAPSHOT'
         compile 'net.sf.opencsv:opencsv:2.3'
         compile "org.apache.lucene:lucene-core:2.4.0"
         compile "org.apache.lucene:lucene-demos:2.4.0"
@@ -77,7 +80,7 @@ grails.project.dependency.resolution = {
             excludes 'groovy', 'nekohtml'
         }
         compile 'org.grails:grails-plugin-rest:2.3.5-hyve4'
-        compile 'org.transmartproject:transmart-core-api:1.0-SNAPSHOT'
+        compile 'org.transmartproject:transmart-core-api:1.2.1-SNAPSHOT'
 
         /* we need at least servlet-api 2.4 because of HttpServletResponse::setCharacterEncoding */
         compile "javax.servlet:servlet-api:$grails.servlet.version" /* delete from the WAR afterwards */
@@ -97,14 +100,14 @@ grails.project.dependency.resolution = {
 
         runtime 'org.javassist:javassist:3.16.1-GA'
 
-        
+
         test('junit:junit:4.11') {
             transitive = false /* don't bring hamcrest */
             export     = false
         }
 
         test 'org.hamcrest:hamcrest-core:1.3',
-             'org.hamcrest:hamcrest-library:1.3'
+                'org.hamcrest:hamcrest-library:1.3'
 
         test 'org.gmock:gmock:0.9.0-r435-hyve2', {
             transitive = false
@@ -119,21 +122,22 @@ grails.project.dependency.resolution = {
         compile ':build-info:1.2.5'
         compile ':hibernate:3.6.10.7'
         compile ':quartz:1.0-RC2'
-        compile ':rdc-rmodules:0.3-SNAPSHOT'
+        compile ':rdc-rmodules:1.2.2-SNAPSHOT'
         compile ':spring-security-core:2.0-RC2'
         compile ":spring-security-oauth2-provider:1.0.5.2"
 
         runtime ':prototype:1.0'
         runtime ':jquery:1.7.1'
-        runtime ':transmart-core:1.0-SNAPSHOT'
+        runtime ':transmart-core:1.2.1-SNAPSHOT'
         runtime ':resources:1.2.1'
-        runtime ':transmart-mydas:0.1-SNAPSHOT'
-        runtime ':dalliance-plugin:0.2-SNAPSHOT'
+        //  runtime ':transmart-mydas:0.1-SNAPSHOT'
+        //  runtime ':dalliance-plugin:0.2-SNAPSHOT'
         runtime ':transmart-rest-api:0.1-SNAPSHOT'
+        compile ":piwik:0.1"
 
         // Doesn't work with forked tests yet
         //test ":code-coverage:1.2.6"
-        test ':transmart-core-db-tests:1.0-SNAPSHOT'
+        //  test ':transmart-core-db-tests:1.0-SNAPSHOT'
     }
 }
 
