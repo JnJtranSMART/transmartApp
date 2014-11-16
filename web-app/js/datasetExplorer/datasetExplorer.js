@@ -305,22 +305,6 @@ Ext.onReady(function()
 					         ,
 				        	 '-'
 				        	 ,
-					         {
-					        	 text : 'Survival Analysis',
-					        	 handler : function()
-					        	 {
-					        	 	if(isSubsetEmpty(1) || isSubsetEmpty(2))
-					        	 	{
-					        			alert('Survival Analysis needs time point data from both subsets.');
-					        		 	return;
-					        	 	}
-					        	 	else {
-					        	 		showSurvivalAnalysis();
-					        	 	}
-					        	 },
-					        	 disabled : GLOBAL.GPURL == ""
-					         }
-					         ,
 				        	 '-'
 				        	 ,
 					         {
@@ -387,26 +371,6 @@ Ext.onReady(function()
 					        	disabled : GLOBAL.GPURL == ""
 					        }
 					        ,
-					        {
-					        	 text : 'PLINK',
-					        	 disabled : true,
-					        	 handler : function()	{
-					        	 	if(isSubsetEmpty(1) && isSubsetEmpty(2))
-					        	 	{
-					        			alert('Both dataset is empty. Please choose a valid dataset.');
-					        		 	return;
-					        	 	}
-					        	 	if((GLOBAL.CurrentSubsetIDs[1] == null && ! isSubsetEmpty(1)) || (GLOBAL.CurrentSubsetIDs[2] == null && ! isSubsetEmpty(2)))
-					        	 	{
-					        			runAllQueries(function()	{
-					        				showPlinkSelection();
-					        			});
-					        	 	} else	{
-					        	 		showPlinkSelection();
-					        	 	}
-					        	 	return;
-					        	}
-					        },
 					        {
 					        	 text : 'Genome-Wide Association Study',
 					        	 handler : function()	{
