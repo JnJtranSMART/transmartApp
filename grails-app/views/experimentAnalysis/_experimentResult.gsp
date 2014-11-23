@@ -17,7 +17,6 @@
  
 -->
 
-<g:setProvider library="prototype"/>
 <g:if test="${searchresult?.result?.groupByExp}" ><div id='ptfilterresult'></g:if>
 <g:else><div id='ptfilterresult_tea'></g:else>
 

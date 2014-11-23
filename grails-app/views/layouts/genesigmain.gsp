@@ -63,11 +63,14 @@
 	        });
 		</script>
 		<g:layoutHead />
-	</head>
+        <r:layoutResources/>
+        <piwik:trackPageview />
+    </head>
 	<body>
         <div id="header-div">
             <g:render template="/layouts/commonheader" model="['app':'genesignature']" />
 			<div id="app"><g:layoutBody /></div>
 		</div>
+        <r:layoutResources/>
 	</body>
 </html>

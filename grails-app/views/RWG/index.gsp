@@ -190,6 +190,7 @@
 
 
         <r:layoutResources /><%-- XXX: Use template --%>
+        <piwik:trackPageview />
     </head>
     <body>
         <div id="header-div">        

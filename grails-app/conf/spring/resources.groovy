@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMap
 import org.codehaus.groovy.grails.commons.spring.DefaultBeanConfiguration
 import org.springframework.beans.factory.config.CustomScopeConfigurer
 import org.springframework.security.core.session.SessionRegistryImpl
+import org.springframework.security.web.DefaultRedirectStrategy
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy
 import org.springframework.security.web.session.ConcurrentSessionFilter
 import org.transmart.authorization.CurrentUserBeanFactoryBean
@@ -34,10 +35,10 @@ import org.transmartproject.core.users.User
 beans = {
     xmlns context:"http://www.springframework.org/schema/context"
     
-    if (grailsApplication.config.org.transmart.security.samlEnabled) {
+/*    if (grailsApplication.config.org.transmart.security.samlEnabled) {
         importBeans('classpath:/spring/spring-security-saml.xml')
     }
-
+*/
     marshallerRegistrarService(MarshallerRegistrarService)
 
     /* core-api authorization wrapped beans */
@@ -86,6 +87,12 @@ beans = {
     
     //overrides bean implementing GormUserDetailsService?
 	userDetailsService(com.recomdata.security.AuthUserDetailsService)
-
-
+    redirectStrategy(DefaultRedirectStrategy)
+    identityVaultAuthenticationFilter(com.recomdata.security.IdentityVaultAuthenticationFilter)	{
+        authenticationManager = ref('authenticationManager')
+        springSecurityService = ref('springSecurityService')
+        userDetailsService = ref('userDetailsService')
+        filterProcessesUrl = '/saml/sso'
+        redirectStrategy = ref('redirectStrategy')
+    }
 }

@@ -60,8 +60,8 @@ class UserLandingController {
         if (skip_disclaimer) {
                         redirect(uri:'/search');     
         } else {
-                  redirect(uri: '/userLanding/disclaimer.gsp')
-                  }
+                  render(view: "/userLanding/disclaimer")
+               }
       }
 	def agree = {
         new AccessLog(username: username, event:"Disclaimer accepted",

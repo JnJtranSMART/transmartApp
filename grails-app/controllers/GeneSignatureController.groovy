@@ -97,22 +97,22 @@ class GeneSignatureController {
 		log.info "Admin? "+bAdmin
 
 		// summary view
-		def signatures = geneSignatureService.listPermissionedGeneSignatures(user.id, bAdmin);
-		def ctMap = geneSignatureService.getPermissionedCountMap(user.id, bAdmin)
+        def signatures = geneSignatureService.listPermissionedGeneSignatures(user);
+        def ctMap = geneSignatureService.getPermissionedCountMap(user.id, bAdmin)
 
 		// break into owned and public
 		def myItems = []
-		def pubItems = []
+		// def pubItems = []
 
 		signatures.each {
-			if(user.id==it.createdByAuthUser.id) {
+		//	if(user.id==it.createdByAuthUser.id) {
 				myItems.add(it)
-			} else {
-				pubItems.add(it)
-			}
+		//	} else {
+		//		pubItems.add(it)
+		//	}
 		}
 
-		render(view: "list", model:[user: user, adminFlag: bAdmin, myItems: myItems, pubItems: pubItems, ctMap: ctMap])
+		render(view: "list", model:[user: user, adminFlag: bAdmin, myItems: myItems, ctMap: ctMap]) // pubItems: pubItems, ctMap: ctMap])
 	}
 	
 
@@ -850,10 +850,12 @@ class GeneSignatureController {
 	 * bind form parameters to GeneSignature domain instance
 	 */
 	void bindGeneSigData(Map params, GeneSignature gs) {
-		// skip if page param not specified
-		if(params.page==null) return
-
-		long pageNum = Long.parseLong(params.page);
+		// We were skipping here but that was throwing an error
+		// Assume page 1 if it is not set for now
+        long pageNum = 1
+		if (params.page != null)  {
+            pageNum = Long.parseLong(params.page);
+        }
 
 		switch (pageNum) {
 			case 1:

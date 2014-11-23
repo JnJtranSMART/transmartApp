@@ -12,7 +12,7 @@
   
   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS    * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
   
-  You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.
+  You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
   
  
 -->
@@ -165,7 +165,7 @@
             		<g:if test="${gs.foldChgMetricConceptCode?.bioConceptCode!='NOT_USED'}"><td><g:textField name="foldChgMetric_${n}" maxlength="20" /></td></g:if>
       			</g:else>
 	
-				<td style="text-align: center;"><img alt="remove item" onclick="javascript:removeNewItem(${n});" src="${resource(dir:'images',file:'remove.png')}" /></td>
+				<td style="text-align: center;"><img alt="remove item" onclick="removeNewItem(${n});" src="${resource(dir:'images',file:'remove.png')}" /></td>
 			</tr>
 		</g:while>
 		</tbody>     
@@ -173,7 +173,6 @@
 	
 	<div class="buttons">
 		<g:actionSubmit class="save" action="addItems" value="Add Items" />
-		<g:actionSubmit class="delete" action="deleteItems" value="Delete Checked" onclick="return confirm('Are you sure you want to delete these items?')" />
 		<g:actionSubmit class="cancel" action="refreshSummary" onclick="return confirm('Are you sure you want to exit?')" value="Cancel" />
 	</div>	   	
    	   	

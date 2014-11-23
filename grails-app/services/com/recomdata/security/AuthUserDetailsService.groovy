@@ -28,6 +28,7 @@ package com.recomdata.security
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
 import org.hibernate.criterion.CriteriaSpecification
+import org.springframework.security.core.authority.GrantedAuthorityImpl
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -100,4 +101,23 @@ class AuthUserDetailsService implements GrailsUserDetailsService {
             authorities ?: NO_ROLES, user.id, user.userRealName)
 	}
 
+    UserDetails loadUserByWWID(String wwid) throws UsernameNotFoundException	{
+        log.info "Attempting to find user for WWID: $wwid"
+        log.debug "Use withTransaction to avoid lazy loading initialization error when accessing the authorities collection"
+        Class<?> User = grailsApplication.getDomainClass(conf.userLookup.userDomainClassName).clazz
+        User.withTransaction { status ->
+            def user = User.findById(wwid)
+            if (!user) {
+                throw new UsernameNotFoundException("User not found for WWID: $wwid")
+            }
+            if (!user.enabled)	{
+                throw new UsernameNotFoundException("User with WWID: $wwid is not enabled for tranSMART")
+            }
+            def authorities = user.authorities.collect {new GrantedAuthorityImpl(it.authority)}
+
+            return new AuthUserDetails(user.username, user.passwd, user.enabled,
+                    !user.accountExpired, !user.passwordExpired, !user.accountLocked,
+                    authorities ?: NO_ROLES, user.id, user.userRealName)
+        }
+    }
 }

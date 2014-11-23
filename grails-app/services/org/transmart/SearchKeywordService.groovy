@@ -1,4 +1,7 @@
 package org.transmart
+
+import org.transmart.biomart.BioDataExternalCode
+
 /*************************************************************************
  * tranSMART - translational medicine data mart
  * 
