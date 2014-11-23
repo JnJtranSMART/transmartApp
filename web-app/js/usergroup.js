@@ -110,7 +110,7 @@ function getSelectedAsCommaSeparatedList(ob)
             jQuery.ajax({
                 url:          pageInfo.basePath + '/secureObjectAccess/listAccessForPrincipal',
                 asynchronous: true,
-                data: Recom.rc.serializeFormElements.call($('#accessform'),
+                data: Recom.rc.serializeFormElements.call(jQuery('#accessform'),
                         ['searchtext', 'currentprincipalid', 'accesslevelid']),
                 success: function (returnedData) {
                     jQuery('#permissions').html(returnedData);
@@ -329,7 +329,7 @@ Recom.rc.serializeFormElements = function(elements, form /* jquery el or undef *
         form = jQuery(this).closest('form')
         if (!form.length) {
             // if form is not set, search in the whole document
-            form = $(window.document);
+            form = jQuery(window.document);
         }
     }
     var data = {};
