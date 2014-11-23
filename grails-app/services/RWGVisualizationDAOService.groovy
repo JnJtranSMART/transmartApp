@@ -1036,7 +1036,7 @@ class RWGVisualizationDAOService {
 		
     	s.append(" order by fold_change_ratio desc, tea_normalized_pvalue ) A order by fold_change_ratio desc, tea_normalized_pvalue) B")
     	//s.append(" ) C where proberank between ? and ? ")
-        query = databasePortabilityService.createPaginationQuery(s as String, 'proberank')
+        query = databasePortabilityService.createPaginationQuery(s as String)
 		
 		int startIndex = (pageNumber.toInteger()-1)*probesPerPage + 1
 		int endIndex = (pageNumber.toInteger())*probesPerPage 
@@ -1061,14 +1061,14 @@ class RWGVisualizationDAOService {
 		// loop through return set again to add to probes list with rankings to the probeId and selectDisplay objects 				
 		results.each{ row->
 			
-			probesList.put(row.proberank.toString(), row.probe_id)
+			probesList.put(row.rnum.toString(), row.probe_id)
 			def multiGeneIndicator = ""
 			if (row.gene_count > 1)  {
                  multiGeneIndicator = "+"				
 			}
 			
 			def probeSelectDisplay = /${row.gene_name}${multiGeneIndicator} (${row.probe_id})/ 
-			selectList.put(row.proberank.toString(), probeSelectDisplay)						
+			selectList.put(row.rnum.toString(), probeSelectDisplay)
 		}
 		log.info("after probe ranking query second loop")
 		log.info("after probe ranking query")
