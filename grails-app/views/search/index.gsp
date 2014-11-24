@@ -131,6 +131,8 @@
             searchcombo.className += " searchcombobox-disabled";
             searchcombo.style.width = "442px";
         }
+
+
     </script>
     <title>${grailsApplication.config.com.recomdata.searchtool.appTitle}</title>
     <!-- ************************************** -->
@@ -140,7 +142,6 @@
         helpURL = '${grailsApplication.config.com.recomdata.searchtool.adminHelpURL}';
     </script>
     <!-- ************************************** -->
-    <r:layoutResources />
 
 </head>
 <body>
@@ -148,6 +149,8 @@
     <g:render template="/layouts/commonheader" model="[app:search]" />
     <g:render template="/layouts/initialsearchheader" model="[app:search]" />
 </div>
-    <r:layoutResources />
+<script>
+    jQuery("#timeout-div").hide();
+</script>
 </body>
 </html>
